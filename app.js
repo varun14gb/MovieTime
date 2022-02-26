@@ -31,7 +31,22 @@ handleQuery = async () => {
             ratings = ratings.concat(`<p>${rating.Source} : ${rating.Value}</p>`)
         });
 
-        console.log(movie1);
+        let credits = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${apiKey}`)
+        credits = await credits.json();
+
+        let casts = "";
+        for await (const ac of credits.cast) {
+            let actor = await fetch(`https://api.themoviedb.org/3/person/${ac.id}?api_key=${apiKey}`);
+            actor = await actor.json();
+
+            casts = casts.concat(`
+                <div class="card">
+                    <img src="https://image.tmdb.org/t/p/original/${actor.profile_path}" />
+                    <p>${actor.name}</p>
+                </div>
+            `);
+        }
+
         const main = document.querySelector(".search");
         main.innerHTML = `
         <div class="movie">
@@ -47,13 +62,23 @@ handleQuery = async () => {
                 </div>
                 <blockquote><i>${movie.tagline}</i></blockquote>
                 <p>${movie.overview}</p>
+                <h4><b>Awards:</b>${movie1.Awards}</h4>
                 <h3>Ratings:</h3>
                 <div class="ratings">
                     ${ratings}
                 </div>
             </div>
+            
         </div>
         `;
+
+        document.querySelector(".casts").innerHTML = `
+                <h2>Cast:</h2>
+                    <div class="cards">
+                        ${casts}
+                    </div><div class="cards">
+                </div>
+                `;
 
     } catch (e) {
         console.log(e)
