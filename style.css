@@ -81,7 +81,38 @@ footer {
 }
 
 .cont {
+    padding: 8px;
     display: flex;
+    flex-direction: column;
     width: 100%;
-    justify-content: center;
+    align-items: center;
+    color: rgb(251, 241, 238);
+}
+
+.tags {
+    display: flex;
+}
+
+.tags p {
+    display: flex;
+    background-color: tomato;
+    margin-right: 8px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.date {
+    display: flex;
+    color: grey;
+    margin: 0;
+}
+
+.date p{
+    margin: 0 8px;
+}
+
+.ratings p{
+    padding: 12px;
+    border: 1px solid rgb(255, 71, 71);
+    border-radius: 8px;
 }
