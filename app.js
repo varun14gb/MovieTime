@@ -1,9 +1,34 @@
+document.getElementById("search").addEventListener("keyup", function (event) {
+    if (event.key === "Enter") {
+        handleQuery();
+    }
+});
+
 const apiKey = "bcb1a8422badaa2928750e97d9713b59";
+
+// Suggestions of popular movies in search field
+// fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US`)
+//     .then(response => response.json())
+//     .then(suggestions => {
+//         let sg = "";
+//         suggestions.results.forEach(suggestion => {
+//             sg = sg.concat(`<option value="${suggestion.original_title}">`)
+//         });
+
+//         document.querySelector("#suggestions").innerHTML = sg;
+//     })
+//     .catch(err => {
+//         return alert("Error occurred while fetching suggestions!");
+//     })
+
 
 handleQuery = async () => {
     try {
-
+        let main = document.querySelector(".search");
         const query = document.querySelector("#search").value;
+
+        main.innerHTML = `<div class="loader"></div>`;
+
         if (query === "") {
             return alert("Enter somehing in search field");
         }
@@ -41,18 +66,17 @@ handleQuery = async () => {
 
             casts = casts.concat(`
                 <div class="card">
-                    <img src="https://image.tmdb.org/t/p/original/${actor.profile_path}" />
+                    <img alt="${actor.name}" src="https://image.tmdb.org/t/p/original/${actor.profile_path}" />
                     <p>${actor.name}</p>
                 </div>
             `);
         }
 
-        const main = document.querySelector(".search");
         main.innerHTML = `
         <div class="movie">
             <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" />
             <div class="cont">
-                <h1>${movie.original_title}</h1>
+                <h1 class="title">${movie.original_title}</h1>
                 <div class="date">
                     <p>Release Date: ${movie.release_date}</p>
                     <p>Runtime: ${movie.runtime}m</p>
@@ -62,7 +86,7 @@ handleQuery = async () => {
                 </div>
                 <blockquote><i>${movie.tagline}</i></blockquote>
                 <p>${movie.overview}</p>
-                <h4><b>Awards:</b>${movie1.Awards}</h4>
+                <p><b>Awards:</b>${" " + movie1.Awards}</p>
                 <h3>Ratings:</h3>
                 <div class="ratings">
                     ${ratings}
@@ -73,15 +97,14 @@ handleQuery = async () => {
         `;
 
         document.querySelector(".casts").innerHTML = `
-                <h2>Cast:</h2>
+        <h2>Cast:</h2>
                     <div class="cards">
                         ${casts}
-                    </div><div class="cards">
+                    </div>
                 </div>
                 `;
 
     } catch (e) {
-        console.log(e)
         return alert("Error occurred while connnecting to APIs!");
     }
 }
