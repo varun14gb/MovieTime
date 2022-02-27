@@ -1,26 +1,31 @@
+const apiKey = "bcb1a8422badaa2928750e97d9713b59";
+
 document.getElementById("search").addEventListener("keyup", function (event) {
     if (event.key === "Enter") {
         handleQuery();
     }
 });
 
-const apiKey = "bcb1a8422badaa2928750e97d9713b59";
+// Suggestions of popular movies in search field (20 * 20)
+fillSuggestions = () => {
+    let sg = "";
+    for (let i = 1; i <= 20; i++) {
+        fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=${i.toString()}`)
+            .then(response => response.json())
+            .then(suggestions => {
+                suggestions.results.forEach(suggestion => {
+                    sg = sg.concat(`<option value="${suggestion.original_title}">`)
+                });
 
-// Suggestions of popular movies in search field
-// fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US`)
-//     .then(response => response.json())
-//     .then(suggestions => {
-//         let sg = "";
-//         suggestions.results.forEach(suggestion => {
-//             sg = sg.concat(`<option value="${suggestion.original_title}">`)
-//         });
+                document.querySelector("#suggestions").innerHTML = sg;
+            })
+            .catch(err => {
+                return alert("Error occurred while fetching suggestions!");
+            })
+    }
+}
 
-//         document.querySelector("#suggestions").innerHTML = sg;
-//     })
-//     .catch(err => {
-//         return alert("Error occurred while fetching suggestions!");
-//     })
-
+fillSuggestions();
 
 handleQuery = async () => {
     try {
